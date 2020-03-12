@@ -1,0 +1,63 @@
+---
+title: "Plotting Corona Virus Tweets on the Map"
+output: html_notebook
+---
+
+```{r}
+# Set working directory
+setwd("E:/../..")
+
+```
+
+
+```{r}
+# Import the libraries
+library(rtweet)
+library(maps)
+```
+
+
+
+```{r}
+# Extract 50000 tweets on "#coronavirus"
+corona_twt <- search_tweets("#coronavirus", n=50000, include_rts = T, retryonratelimit = T)
+
+dim(corona_twt)
+```
+
+```{r}
+# View tweets on "#coronavirus"
+
+View(corona_twt)
+  
+```
+
+
+```{r}
+# Extract geolocation data and append new columns
+covid_coord <- lat_lng(corona_twt)
+
+# View the lat and lng columns
+View(covid_coord)
+
+```
+
+
+```{r}
+# Omit rows with missing lat and lng values
+covid_geo <- na.omit(covid_coord[,c("lat", "lng")])
+
+# View few rows with the lat and lng values
+head(covid_geo)
+
+```
+
+
+
+```{r}
+# Plot longitude and latitude values of tweets on the world map
+map(database = "world", fill = TRUE, col = "light yellow")
+with(covid_geo, points(lng, lat, pch = 20, cex = 1, col = 'blue'))
+
+```
+
